@@ -40,15 +40,7 @@ d3.csv("7_OneCatOneNum.csv", function(data) {
       .range([innerRadius, outerRadius])   // Domain will be define later.
       .domain([0, 14000]); // Domain of Y is from 0 to the max seen in the data
 
-  svg.append("g")
-    .selectAll("circle")
-    .data(data)
-    .enter()
-    .append("circle")
-    .attr("cx", 100)
-    .attr("cy", 100)
-    .attr("r", 50)
-
+  // Add the bars
   // Add the bars
   svg.append("g")
     .selectAll("path")
@@ -60,9 +52,20 @@ d3.csv("7_OneCatOneNum.csv", function(data) {
           .innerRadius(innerRadius)
           .outerRadius(function(d) { return y(d['Value']); })
           .startAngle(function(d) { return x(d.Country); })
-          .endAngle(function(d) { return x(d.Country) +1})
+          .endAngle(function(d) { return x(d.Country) + x.bandwidth(); })
           .padAngle(0.01)
           .padRadius(innerRadius))
+
+svg.append("g")
+    .selectAll("circle")
+    .data(data)
+    .enter()
+    .append("circle")
+    .attr("cx", function(d) { return y(d['Value']) * Math.cos(x(d.Country))})
+    .attr("cy",  function(d) { return y(d['Value']) * Math.sin(x(d.Country))})
+    .attr("r", 10)
+    .attr('transform', 'rotate(-90)')
+        
 
   // Add the labels
   svg.append("g")
