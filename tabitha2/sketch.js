@@ -1,8 +1,11 @@
 var maxX
+var columns = ["c1","c2","c3"]
+var currentCol = 0
+var title = "Olympics"
 
 function preload() {
   // Load up the medals table data
-  table = loadTable('medals_table.csv', 'csv', 'header');
+  table = loadTable('data.csv', 'csv', 'header');
 }
 
 function setup() {
@@ -10,30 +13,33 @@ function setup() {
   //noLoop()
   
   // Get max medals so we can set the x axis max value
-  maxX = max(table.getColumn('gold'))
+  maxX = max(table.getColumn(columns[currentCol]))
 
   print(table)
 
-  frameRate(2)
+  frameRate(10)
 }
 
-function sortData() {
+// Perform one pass of a bubble sort
+function sortData(columnName) {
   let swapped = false
-  print(table.rows.length)
+  //print(table.rows.length)
 
   for (var r = 0; r < table.rows.length-1; r++) {
-    first = table.rows[r].obj.gold 
-    second = table.rows[r+1].obj.gold
-    print(table.rows[r].obj.country+first  + "-" + table.rows[r+1].obj.country+second)
-    if(first < second ) {
-      print("swap")
+    firstBar = parseInt(table.rows[r].obj[columnName],10)
+    secondBar = parseInt(table.rows[r+1].obj[columnName],10)
+    //print(table.rows[r].obj.country+first  + "-" + table.rows[r+1].obj.country+second)
+    if(firstBar < secondBar ) {
+      table.rows[r].smaller = true
+      table.rows[r+1].bigger = true
+      //print("swap")
       tmp = table.rows[r]
       table.rows[r] = table.rows[r+1]
       table.rows[r+1] = tmp
       swapped = true
     }
   }
-  if (!swapped) noLoop()
+  return swapped
 }
 
 function draw() {
@@ -48,18 +54,28 @@ function draw() {
   rect(0,0,width,height)
   
   // Draw a horizontal bar chart
-  HBarChart(table)
+  HBarChart(table, columns[currentCol])
 
-  sortData()
-  print(table)
+  // Perform one pass of a bubble sort
+  let swapped = sortData(columns[currentCol])
+  if (!swapped) {
+    // If no swaps we can move to the next column
+    currentCol++
+    if (currentCol >= columns.length) {
+      noLoop()
+      // When we have no more data, redraw the chart without the highlight colour and stop looping
+      HBarChart(table, columns[currentCol-1])
+    }
+    print("col " + currentCol)
+  }
 }
 
-function HBarChart(data) {
+function HBarChart(data,columnName) {
   // Get number of rows (i.e. number of data points)
   var rowCount = data.getRowCount();
 
-  // Get the column of gold medals
-  let golds = data.getColumn("gold")
+  // Get the column of values
+  let values = data.getColumn(columnName)
   
   // Define the drawing area
   drawingLeft = 130
@@ -73,7 +89,7 @@ function HBarChart(data) {
 
   // Go through each row of data, drawing one bar for each row
   for (var r = 0; r < rowCount; r++) {
-    var xVal = parseInt(golds[r],10);
+    var xVal = parseInt(values[r],10);
 
     // For this row, compute the y coordinate of the top of the bar, mapping the row index r from data coordinates to screen coordinates
     var y = map(r, 0, rowCount, drawingTop, drawingBottom);
@@ -83,7 +99,12 @@ function HBarChart(data) {
 
     // Draw the bar
     noStroke()
-    fill(color(255,215,0))
+    if (table.rows[r].bigger) {
+      fill(color(0,215,0))
+      table.rows[r].bigger = false
+    }
+    else
+      fill(color(255,215,0))
     rect(drawingLeft, y-barHeight, x-drawingLeft, barHeight)
 
     // Draw the y-axis and labels
@@ -104,7 +125,7 @@ function HBarChart(data) {
   fill('black')
   textAlign(CENTER, BASELINE);
   textSize(15);
-  text("Olympics 2016", posx, posy);  
+  text(title, posx, posy);  
 }
 
 
