@@ -1,0 +1,41 @@
+<meta charset="utf-8">
+
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v4.js"></script>
+
+<!-- Create a div where the graph will take place -->
+<div id="my_dataviz"></div>
+<script>
+
+    // set the dimensions and margins of the graph
+    var margin = {top: 10, right: 30, bottom: 30, left: 60},
+        width = 460 - margin.left - margin.right,
+        height = 400 - margin.top - margin.bottom;
+    
+    // append the svg object to the body of the page
+    var svg = d3.select("#my_dataviz")
+      .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+
+
+    
+        svg.append("circle")
+        .attr("cx", 300)
+        .attr("cy", 300)
+        .attr("r", 30)
+        .on('click', function(d,i){ location.href = 'index2.html';  });
+
+        svg.append("circle")
+        .attr("cx", 200)
+        .attr("cy", 200)
+        .attr("r", 30)
+
+        svg.append("circle")
+        .attr("cx", 200)
+        .attr("cy", 300)
+        .attr("r", 30)
+
+
+    
+    </script>

@@ -1,5 +1,7 @@
 let numBalls = 50
 let countBalls = 0
+let stackHeight = -10
+let ballSize = 5
 
 let balls = []
 
@@ -10,6 +12,7 @@ function preload() {
 
 function setup() {
   createCanvas(400, 400);
+  frameRate(30)
 }
 
 function draw() {
@@ -32,11 +35,13 @@ function draw() {
       fill("red")
     else
       fill("white")
-    circle(balls[i].x, balls[i].y,20)
+    circle(balls[i].x, balls[i].y,ballSize)
 
-    if (balls[i].y<height-20)
+    if (balls[i].y<height-stackHeight)
       balls[i].y+=5
   }
+
+  stackHeight+=0.1
 }
 
 function randomCircle(ratio) {
