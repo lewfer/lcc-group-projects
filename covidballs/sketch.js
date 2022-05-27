@@ -45,8 +45,23 @@
  let maxRadius = 7
  let currentFrame = 0
  
+ let size10 = 1
+ let size100 = 2
+ let size1000 = 5
+ let size10000 = 10
+ let size100000 = 15
+ let size1000000 = 20
+ /*
+   10        1
+   100       2
+   1000      5
+   10000     10
+   100000    15
+   1000000   20
+ */
  let data = [{usa:8, china:9783}, 
              {usa:17, china:69468},
+             {usa:192054, china:3814}, 
              {usa:17, china:69468}, 
              {usa:17, china:69468}, 
              {usa:17, china:69468}, 
@@ -55,15 +70,22 @@
              {usa:17, china:69468}, 
              {usa:17, china:69468}, 
              {usa:17, china:69468}, 
-             {usa:17, china:69468}, 
-             {usa:17, china:69468}]
+             {usa:6563321, china:69468}]
  
- let build = [{month:0, usa:2, china:5},
-             {month:0, usa:2, china:5},
+ let build = [{month:0, usa:size10, china:size10000},
 
-             {month:1, usa:2, china:6},
-             {month:1, usa:2, china:6},
-             {month:2, usa:2, china:5},
+             {month:1, usa:size10, china:size10000},
+             {month:1, usa:size10, china:size10000},
+             {month:1, usa:0, china:size10000},
+             {month:1, usa:0, china:size10000},
+             {month:1, usa:0, china:size10000},
+             {month:1, usa:0, china:size10000},
+             {month:1, usa:0, china:size10000},
+
+             {month:2, usa:size100000, china:size1000},
+             {month:2, usa:size100000, china:size1000},
+             {month:2, usa:2, china:size1000},
+             {month:2, usa:2, china:size1000},
              {month:2, usa:3, china:5},
              {month:3, usa:3, china:5},
              {month:3, usa:4, china:5},
